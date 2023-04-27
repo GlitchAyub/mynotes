@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "176540313962",
+    "project_id": "mynotesglitch",
+    "storage_bucket": "mynotesglitch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176540313962:android:a2b9cb7f0974141bcf9d13",
+        "android_client_info": {
+          "package_name": "com.glitchayub.mynotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176540313962-vn6r3re901k5ss15i5h2tus6j9qdmpm6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVnJW16inZYQSJPI-HHmb5Qq8vhGKVkdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176540313962-vn6r3re901k5ss15i5h2tus6j9qdmpm6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
