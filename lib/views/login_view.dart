@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -31,17 +31,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-
-            case ConnectionState.done:
               return Column(
                 children: [
                   TextField(
@@ -92,11 +81,5 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ],
               );
-            default:
-              return const Text('Loading.........');
-          }
-        },
-      ),
-    );
   }
 }
