@@ -40,26 +40,26 @@ class HomePage extends StatelessWidget {
           case ConnectionState.done:
             final currentuser = FirebaseAuth.instance.currentUser;
 
+            // if (currentuser != null) {
+            //   if (currentuser.emailVerified) {
+            //     return const NotesView();
+            //   } else {
+            //     return const VerifyEmailView();
+
+            //     // return const LoginView();
+            //   }
+            // } else {
+            //   return const LoginView();
+            // }
             if (currentuser != null) {
-              if (currentuser.emailVerified) {
+              if (currentuser.email != null) {
                 return const NotesView();
               } else {
-                return const VerifyEmailView();
-
-                // return const LoginView();
+                return const LoginView();
               }
             } else {
-              return const LoginView();
+              return const RegisterView();
             }
-          // if (currentuser != null) {
-          //   if (currentuser.email != null) {
-          //     return const NotesView();
-          //   } else {
-          //     return const LoginView();
-          //   }
-          // } else {
-          //   return const RegisterView();
-          // }
 
           default:
             return const CircularProgressIndicator();
