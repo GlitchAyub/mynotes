@@ -19,7 +19,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void initState() {
-    // TODO: implement initState
+   
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -27,7 +27,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+  
     _email.dispose();
     _password.dispose();
     super.dispose();

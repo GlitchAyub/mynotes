@@ -1,7 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-
-
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/views/login_view.dart';
@@ -53,18 +50,6 @@ class HomePage extends StatelessWidget {
             } else {
               return const LoginView();
             }
-            
-          // if (currentuser != null) {
-          //   if (currentuser.email != null) {
-          //     return const NotesView();
-          //   } else {
-          //   return const RegisterView();
-
-          //   }
-          // } else {
-          //     return const LoginView();
-          // }
-
           default:
             return const CircularProgressIndicator();
         }
