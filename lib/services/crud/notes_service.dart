@@ -79,7 +79,7 @@ class NotesService {
     if (notes == null) {
       throw CouldNotFindNote();
     } else {
-      final note = DatabaseNote.fromRow(notes as Map<String, Object?>);
+      final note = DatabaseNote.fromRow(notes.first);
       _notes.removeWhere((note) => note.id == id);
       _notes.add(note);
       _notesStreamController.add(_notes);
@@ -138,29 +138,29 @@ class NotesService {
   Future<DatabaseUser> getUser({required String email}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
-    final results = db.query(
-      userTable,
-      limit: 1,
-      where: 'email = ?',
-      whereArgs: [email.toLowerCase()],
-    );
-    if (results == null) {
-      throw CouldNotFindUser();
-    } else {
-      return DatabaseUser.fromRow(results as Map<String, Object?>);
-    }
-  }
-
-  Future<DatabaseUser> createUser({required String email}) async {
-    await _ensureDbIsOpen();
-    final db = _getDatabaseOrThrow();
-    final results = db.query(
+    final results = await db.query(
       userTable,
       limit: 1,
       where: 'email = ?',
       whereArgs: [email.toLowerCase()],
     );
     if (results != null) {
+      throw CouldNotFindUser();
+    } else {
+      return DatabaseUser.fromRow(results.first);
+    }
+  }
+
+  Future<DatabaseUser> createUser({required String email}) async {
+    await _ensureDbIsOpen();
+    final db = _getDatabaseOrThrow();
+    final results = await db.query(
+      userTable,
+      limit: 1,
+      where: 'email = ?',
+      whereArgs: [email.toLowerCase()],
+    );
+    if (results == null) {
       throw UserAlreadyExist();
     }
     final userId = await db.insert(
