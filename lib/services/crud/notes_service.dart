@@ -10,10 +10,15 @@ class NotesService {
   Database? _db;
   List<DatabaseNote> _notes = [];
   static final NotesService _shared = NotesService._sharedInstances();
-  NotesService._sharedInstances();
+  NotesService._sharedInstances() {
+    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
   factory NotesService() => _shared;
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNote => _notesStreamController.stream;
 
@@ -76,7 +81,7 @@ class NotesService {
       where: 'id =?',
       whereArgs: [id],
     );
-    if (notes == null) {
+    if (notes.isEmpty) {
       throw CouldNotFindNote();
     } else {
       final note = DatabaseNote.fromRow(notes.first);
@@ -122,7 +127,11 @@ class NotesService {
     const text = '';
     final noteId = await db.insert(
       noteTable,
-      {userIdColumn: owner.id, textColumn: text, isSyncedWithCloudColumn: 1},
+      {
+        userIdColumn: owner.id,
+        textColumn: text,
+        isSyncedWithCloudColumn: 1,
+      },
     );
     final note = DatabaseNote(
       id: noteId,
@@ -144,7 +153,7 @@ class NotesService {
       where: 'email = ?',
       whereArgs: [email.toLowerCase()],
     );
-    if (results != null) {
+    if (results.isEmpty) {
       throw CouldNotFindUser();
     } else {
       return DatabaseUser.fromRow(results.first);
@@ -160,7 +169,7 @@ class NotesService {
       where: 'email = ?',
       whereArgs: [email.toLowerCase()],
     );
-    if (results == null) {
+    if (results.isNotEmpty) {
       throw UserAlreadyExist();
     }
     final userId = await db.insert(
@@ -169,7 +178,10 @@ class NotesService {
         emailColumn: email.toLowerCase(),
       },
     );
-    return DatabaseUser(id: userId, email: email);
+    return DatabaseUser(
+      id: userId,
+      email: email,
+    );
   }
 
   Future<void> deleteUser({required String email}) async {
@@ -247,12 +259,12 @@ class DatabaseUser {
         email = map[emailColumn] as String;
 
   @override
-  String toString() => 'Person,ID = $id,$email';
+  String toString() => 'Person, ID = $id, email =$email';
   @override
   bool operator ==(covariant DatabaseUser other) => id == other.id;
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode => id.hashCode;
 }
 
 class DatabaseNote {
@@ -277,12 +289,12 @@ class DatabaseNote {
 
   @override
   String toString() =>
-      'Note,ID = $id,userId = $userId,isSyncedWithCloud = $isSyncedWithCloud';
+      'Note,ID = $id,userId = $userId,isSyncedWithCloud = $isSyncedWithCloud,text = $text';
   @override
   bool operator ==(covariant DatabaseNote other) => id == other.id;
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode => id.hashCode;
 }
 
 const dbName = 'notes.db';
