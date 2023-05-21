@@ -1,15 +1,18 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/crud/notes_service.dart';
+import 'package:mynotes/utilities/generics/getArguments.dart';
 
-class newNotesView extends StatefulWidget {
-  const newNotesView({super.key});
+class createUpdateNoteView extends StatefulWidget {
+  const createUpdateNoteView({super.key});
 
   @override
-  State<newNotesView> createState() => _newNotesViewState();
+  State<createUpdateNoteView> createState() => _createUpdateNoteViewState();
 }
 
-class _newNotesViewState extends State<newNotesView> {
+class _createUpdateNoteViewState extends State<createUpdateNoteView> {
   DatabaseNote? _note;
   late final NotesService _notesService;
   late final TextEditingController _textController;
@@ -38,7 +41,15 @@ class _newNotesViewState extends State<newNotesView> {
     _textController.addListener(_textControllerListener);
   }
 
-  Future<DatabaseNote> createNewNote() async {
+  Future<DatabaseNote> createOrGetExistingNote(BuildContext context) async {
+    final widgetNote = context.getArguments<DatabaseNote>();
+
+    if (widgetNote != null) {
+      _note = widgetNote;
+      _textController.text = widgetNote.text;
+      return widgetNote;
+    }
+
     final existingNote = _note;
     if (existingNote != null) {
       return existingNote;
@@ -46,7 +57,9 @@ class _newNotesViewState extends State<newNotesView> {
     final currentUser = AuthService.firebase().currentuser!;
     final email = currentUser.email!;
     final owner = await _notesService.getUser(email: email);
-    return await _notesService.createNote(owner: owner);
+    final newNote = await _notesService.createNote(owner: owner);
+    _note = newNote;
+    return newNote;
   }
 
   void _deleteNoteIfNoteIsEmpty() {
@@ -82,17 +95,17 @@ class _newNotesViewState extends State<newNotesView> {
         title: const Text('New Notes'),
       ),
       body: FutureBuilder(
-        future: createNewNote(),
+        future: createOrGetExistingNote(context),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              _note = snapshot.data as DatabaseNote;
               _setupTextControllerListener();
               return TextField(
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                decoration: const InputDecoration(hintText: 'Start Typing  Your Notes'),
+                decoration:
+                    const InputDecoration(hintText: 'Start Typing  Your Notes'),
               );
             default:
               return const CircularProgressIndicator();

@@ -219,7 +219,9 @@ class NotesService {
   Future<void> _ensureDbIsOpen() async {
     try {
       await open();
-    } on DatabaseAlreadyOpened {}
+    } on DatabaseAlreadyOpened {
+      return;
+    }
   }
 
   Future<void> open() async {
