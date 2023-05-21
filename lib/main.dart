@@ -5,8 +5,10 @@ import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notes/createUpdateNoteView.dart';
 import 'package:mynotes/views/notes/notes_view.dart';
 import 'package:mynotes/views/register_view.dart';
+import 'package:mynotes/views/splashScreen/riveAnimation.dart';
 import 'package:mynotes/views/verifyEmail.dart';
 import 'package:mynotes/constants/routes.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,15 +19,15 @@ void main() {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const SimpleRiveAnimation(),
       routes: {
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
-        createOrUpdateNoteRoute: (context) => const createUpdateNoteView(),
+        createOrUpdateNoteRoute: (context) => const createUpdateNoteView(),     
       },
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
     ),
   );
 }

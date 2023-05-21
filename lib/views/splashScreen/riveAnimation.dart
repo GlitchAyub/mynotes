@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/main.dart';
 import 'package:rive/rive.dart';
 
-class SimpleAnimation extends StatefulWidget {
-  const SimpleAnimation({super.key});
+class SimpleRiveAnimation extends StatefulWidget {
+  const SimpleRiveAnimation({Key? key}) : super(key: key);
 
   @override
-  State<SimpleAnimation> createState() => _SimpleAnimationState();
+  State<SimpleRiveAnimation> createState() => _SimpleRiveAnimationState();
 }
 
-class _SimpleAnimationState extends State<SimpleAnimation> {
+class _SimpleRiveAnimationState extends State<SimpleRiveAnimation> {
   @override
   void initState() {
     super.initState();
@@ -20,13 +20,18 @@ class _SimpleAnimationState extends State<SimpleAnimation> {
   @override
   Widget build(BuildContext context) {
     Timer(
-      const Duration(seconds: 5),(){
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: ( (context) =>  const HomePage())));
+      const Duration(seconds: 10),
+      () {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: ((context) => const HomePage())));
       },
     );
     return const Scaffold(
       body: Center(
-        child: RiveAnimation.asset('assets/pencil.riv'),
+        child: RiveAnimation.asset(
+         'animate/pencil.riv',
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
