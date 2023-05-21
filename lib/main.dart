@@ -25,7 +25,7 @@ void main() {
         verifyEmailRoute: (context) => const VerifyEmailView(),
         createOrUpdateNoteRoute: (context) => const createUpdateNoteView(),
       },
-      debugShowCheckedModeBanner: false,
+      // debugShowCheckedModeBanner: false,
     ),
   );
 }
