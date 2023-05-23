@@ -6,6 +6,7 @@ import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_exception.dart';
 import 'package:mynotes/services/auth/bloc/authBloc.dart';
 import 'package:mynotes/services/auth/bloc/authEvents.dart';
+import 'package:mynotes/services/auth/bloc/authState.dart';
 import 'package:mynotes/utilities/dialogs/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
@@ -55,34 +56,27 @@ class _LoginViewState extends State<LoginView> {
             decoration:
                 const InputDecoration(hintText: "Please Enter Your Password"),
           ),
-          TextButton(
-            onPressed: () async {
-              final email = _email.text;
-              final password = _password.text;
-
-              try {
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) async {
+              if (state is AuthStateLoggedOut) {
+                if (state.exception is UserNotFoundAuthException||state.exception is WrongPasswordAuthException) {
+                  await showErrorDialog(context, 'User Not Found');
+                } else if (state.exception is GenericAuthException) {
+                  await showErrorDialog(context, 'Authentication Error');
+                }
+              }
+            },
+            child: TextButton(
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
                 context.read<AuthBloc>().add(AuthEventLogIn(
                       email,
                       password,
                     ));
-              } on UserNotFoundAuthException {
-                await showErrorDialog(
-                  context,
-                  'user-not-found',
-                );
-              } on WrongPasswordAuthException {
-                await showErrorDialog(
-                  context,
-                  'wrong-password',
-                );
-              } on GenericAuthException {
-                await showErrorDialog(
-                  context,
-                  'Authentication Error',
-                );
-              }
-            },
-            child: const Text("Login"),
+              },
+              child: const Text("Login"),
+            ),
           ),
           TextButton(
               onPressed: () {
